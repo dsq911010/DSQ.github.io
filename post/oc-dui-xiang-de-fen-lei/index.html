@@ -1,0 +1,210 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OC对象的分类 | Gridea</title>
+<link rel="shortcut icon" href="https://DSQ.github.io/favicon.ico?v=1614050934376">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://DSQ.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="OC对象的分类 | Gridea - Atom Feed" href="https://DSQ.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="#instance对象（实例对象）
+实例对象在内存中存储的信息包括：
+1、isa指针（父类结构体指针）
+2、成员变量
+#class对象（类对象）
+它是一个类对象，每个类在内存中有且只有一个class对象。
+** class对象在内存中存储的..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://DSQ.github.io">
+  <img class="avatar" src="https://DSQ.github.io/images/avatar.png?v=1614050934376" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              OC对象的分类
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-02-23
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>#instance对象（实例对象）<br>
+<strong>实例对象在内存中存储的信息包括：</strong><br>
+1、isa指针（父类结构体指针）<br>
+2、成员变量</p>
+<p>#class对象（类对象）<br>
+<strong>它是一个类对象，每个类在内存中有且只有一个class对象。</strong><br>
+** class对象在内存中存储的信息包括：**<br>
+1、 isa指针<br>
+2、 superclass指针<br>
+3、 类的属性信息(@property)、类的对象方法信息(instance method)<br>
+4、 类的协议信息（protocol）、类的成员变量信息(ivar)<br>
+5、 ………<br>
+#meta-class对象（元类对象）<br>
+<strong>每个类在内存中有且只有一个meta-class对象</strong><br>
+<strong>Meta-class对象在内存中存储的信息包括：</strong><br>
+1、 isa指针<br>
+2、 superclass指针<br>
+3、 类的类方法信息(class method)<br>
+4、 ……….</p>
+<!-- 元类对象和类对象的内存结构是一样的 -->
+<pre><code>        // 实例对象
+        NSObject *obj1=[NSObject new];
+        NSObject *obj2=[NSObject new];
+        NSLog(@&quot;%p %p&quot;,obj1,obj2);
+        // 类对象
+        Class objclass1=[obj1 class];
+        Class objclass2=[obj2 class];
+        Class objclass3=object_getClass(obj1);
+        Class objclass4=object_getClass(obj2);
+        Class objclass5=[NSObject class];
+        NSLog(@&quot;%p %p %p %p %p&quot;,objclass1,objclass2,objclass3,objclass4,objclass5);
+			// 元类对象
+        // 将类对象当参数传进去获得元类对象
+        Class metaClass1=object_getClass(objclass5);
+        Class metaClass2=object_getClass(objclass4);
+        Class metaClass3=object_getClass(objclass3);
+        Class metaClass4=object_getClass(objclass2);
+        Class metaClass5=object_getClass(objclass1);
+        
+        NSLog(@&quot;%p %p %p %p %p&quot;,metaClass1,metaClass2,metaClass3,metaClass4,metaClass5);
+</code></pre>
+<p><img src="https://DSQ.github.io/post-images/1614050587163.png" alt="类结构" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614050732421.png" alt="内部结构" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614050821772.png" alt="" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614050866436.png" alt="方法" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614050907318.png" alt="Type Encoding" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614049660719.png" alt="方法缓存" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614050442257.png" alt="缓存方式" loading="lazy"><br>
+// 在一定空间的散列表中通过&amp;_mask来存储与搜索保存的bucket_t方法缓存，空间不足时清空散列表并2倍扩容重新生成缓存散列表</p>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://DSQ.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

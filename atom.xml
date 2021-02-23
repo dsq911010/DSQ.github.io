@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://DSQ.github.io</id>
+    <title>Gridea</title>
+    <updated>2021-02-23T03:28:59.791Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://DSQ.github.io"/>
+    <link rel="self" href="https://DSQ.github.io/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://DSQ.github.io/images/avatar.png</logo>
+    <icon>https://DSQ.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2021, Gridea</rights>
+    <entry>
+        <title type="html"><![CDATA[OC对象的分类]]></title>
+        <id>https://DSQ.github.io/post/oc-dui-xiang-de-fen-lei/</id>
+        <link href="https://DSQ.github.io/post/oc-dui-xiang-de-fen-lei/">
+        </link>
+        <updated>2021-02-23T02:42:55.000Z</updated>
+        <content type="html"><![CDATA[<p>#instance对象（实例对象）<br>
+<strong>实例对象在内存中存储的信息包括：</strong><br>
+1、isa指针（父类结构体指针）<br>
+2、成员变量</p>
+<p>#class对象（类对象）<br>
+<strong>它是一个类对象，每个类在内存中有且只有一个class对象。</strong><br>
+** class对象在内存中存储的信息包括：**<br>
+1、 isa指针<br>
+2、 superclass指针<br>
+3、 类的属性信息(@property)、类的对象方法信息(instance method)<br>
+4、 类的协议信息（protocol）、类的成员变量信息(ivar)<br>
+5、 ………<br>
+#meta-class对象（元类对象）<br>
+<strong>每个类在内存中有且只有一个meta-class对象</strong><br>
+<strong>Meta-class对象在内存中存储的信息包括：</strong><br>
+1、 isa指针<br>
+2、 superclass指针<br>
+3、 类的类方法信息(class method)<br>
+4、 ……….</p>
+<!-- 元类对象和类对象的内存结构是一样的 -->
+<pre><code>        // 实例对象
+        NSObject *obj1=[NSObject new];
+        NSObject *obj2=[NSObject new];
+        NSLog(@&quot;%p %p&quot;,obj1,obj2);
+        // 类对象
+        Class objclass1=[obj1 class];
+        Class objclass2=[obj2 class];
+        Class objclass3=object_getClass(obj1);
+        Class objclass4=object_getClass(obj2);
+        Class objclass5=[NSObject class];
+        NSLog(@&quot;%p %p %p %p %p&quot;,objclass1,objclass2,objclass3,objclass4,objclass5);
+			// 元类对象
+        // 将类对象当参数传进去获得元类对象
+        Class metaClass1=object_getClass(objclass5);
+        Class metaClass2=object_getClass(objclass4);
+        Class metaClass3=object_getClass(objclass3);
+        Class metaClass4=object_getClass(objclass2);
+        Class metaClass5=object_getClass(objclass1);
+        
+        NSLog(@&quot;%p %p %p %p %p&quot;,metaClass1,metaClass2,metaClass3,metaClass4,metaClass5);
+</code></pre>
+<p><img src="https://DSQ.github.io/post-images/1614050587163.png" alt="类结构" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614050732421.png" alt="内部结构" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614050821772.png" alt="" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614050866436.png" alt="方法" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614050907318.png" alt="Type Encoding" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614049660719.png" alt="方法缓存" loading="lazy"><br>
+<img src="https://DSQ.github.io/post-images/1614050442257.png" alt="缓存方式" loading="lazy"><br>
+// 在一定空间的散列表中通过&amp;_mask来存储与搜索保存的bucket_t方法缓存，空间不足时清空散列表并2倍扩容重新生成缓存散列表</p>
+]]></content>
+    </entry>
+</feed>
